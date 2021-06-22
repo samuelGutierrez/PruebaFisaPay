@@ -5,6 +5,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using System;
+using System.Globalization;
 
 namespace FisaPayNetCore.Services
 {
@@ -39,12 +41,26 @@ namespace FisaPayNetCore.Services
             listEmpleado = new List<Empleado>();
 
             var empleados = await (from e in _context.Empleados
-                                   orderby e.Nombres descending
+                                   orderby e.Nombres ascending
                                    select new { e }).ToListAsync().ConfigureAwait(false);
 
             foreach (var itemEmpleado in empleados)
             {
-                Empleado data = new Empleado(itemEmpleado.e.Cedula, itemEmpleado.e.Nombres, itemEmpleado.e.Sexo, itemEmpleado.e.FechaNacimiento.ToString("yyyy/MM/dd"), itemEmpleado.e.Salario, itemEmpleado.e.VacunaCovid);
+                int ano, mes, dia;
+
+                string edadActual;
+
+                //Calcular edad actual
+                ano = itemEmpleado.e.FechaNacimiento.Year;
+                mes = itemEmpleado.e.FechaNacimiento.Month;
+                dia = itemEmpleado.e.FechaNacimiento.Day;
+
+                DateTime nacimiento = new DateTime(ano, mes, dia); //Fecha de nacimiento
+                int edad = DateTime.Today.AddTicks(-nacimiento.Ticks).Year - 1;
+
+                edadActual = edad + " años";
+
+                Empleado data = new Empleado(itemEmpleado.e.Id,itemEmpleado.e.Cedula, itemEmpleado.e.Nombres, itemEmpleado.e.Sexo, itemEmpleado.e.FechaNacimiento.ToString("yyyy-MM-dd"), edadActual, itemEmpleado.e.Salario.ToString("C", CultureInfo.CurrentCulture), itemEmpleado.e.VacunaCovid);
                 listEmpleado.Add(data);
             }
 

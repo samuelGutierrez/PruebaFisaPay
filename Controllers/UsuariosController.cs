@@ -39,7 +39,7 @@ namespace FisaPayNetCore.Controllers
         {
             try
             {
-                var usuario = await _userService.AuthenticateAsync(authenticateDto.Usuario, authenticateDto.Contrasena, authenticateDto.Intentos).ConfigureAwait(false);
+                var usuario = await _userService.AuthenticateAsync(authenticateDto.Usuario, authenticateDto.Password, authenticateDto.Intentos).ConfigureAwait(false);
 
                 if (usuario == null)
                     return Unauthorized(new AppException("Usuario/Contraseña invalido."));
@@ -86,6 +86,23 @@ namespace FisaPayNetCore.Controllers
                     status = HttpStatusCode.Accepted,
                     sms = usuario
                 });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { status = HttpStatusCode.BadRequest, message = ex.Message });
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetEmpleados()
+        {
+            try
+            {
+                //obtener listado de usuario
+                var usuariosList = await _userService.GetUsuariosAsync().ConfigureAwait(false);
+
+                return Ok(usuariosList);
             }
             catch (Exception ex)
             {

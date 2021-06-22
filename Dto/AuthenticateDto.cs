@@ -12,7 +12,7 @@ namespace FisaPayNetCore.Dto
         public string Usuario { get; set; }
 
         [Required]
-        public string Contrasena { get; set; }
+        public string Password { get; set; }
 
         public int Intentos { get; set; }
     }
