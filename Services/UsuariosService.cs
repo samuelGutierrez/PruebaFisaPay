@@ -3,6 +3,8 @@ using FisaPayNetCore.Model;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -14,6 +16,7 @@ namespace FisaPayNetCore.Services
         Task<Usuarios> AuthenticateAsync(string usuario, string password, int intentos);
         Task<Usuarios> CreateAsync(Usuarios usuario, string contrasena);
         Task<Usuarios> GetByIdAsync(int id);
+        Task<IEnumerable<Usuarios>> GetUsuariosAsync();
     }
 
     public class UsuariosService : IUsuariosService
@@ -79,6 +82,13 @@ namespace FisaPayNetCore.Services
         public async Task<Usuarios> GetByIdAsync(int id)
         {
             return await _context.Usuarios.FindAsync(id).ConfigureAwait(false);
+        }
+
+        public async Task<IEnumerable<Usuarios>> GetUsuariosAsync()
+        {
+            var lista = await _context.Usuarios.ToListAsync().ConfigureAwait(false);
+
+            return lista;
         }
 
         #region Metodos privados

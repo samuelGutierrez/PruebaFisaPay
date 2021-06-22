@@ -23,7 +23,7 @@ namespace FisaPayNetCore.Controllers
             _mapper = mapper;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetEmpleados()
         {
@@ -52,7 +52,7 @@ namespace FisaPayNetCore.Controllers
                 return Ok(new
                 {
                     status = HttpStatusCode.Created,
-                    sms = "Empleado "+ empleado.Nombres +" creado con exito"
+                    sms = "Empleado " + empleado.Nombres + " creado con exito"
                 });
             }
             catch (Exception ex)
@@ -68,7 +68,7 @@ namespace FisaPayNetCore.Controllers
             try
             {
                 // actualizar un empleado
-                var empleado = await _empleadoService.Update(empleadoDto,id).ConfigureAwait(false);
+                var empleado = await _empleadoService.Update(empleadoDto, id).ConfigureAwait(false);
 
                 return Ok(new
                 {
@@ -83,7 +83,7 @@ namespace FisaPayNetCore.Controllers
         }
 
         [Authorize]
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             try
