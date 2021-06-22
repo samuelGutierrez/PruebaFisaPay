@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FisaPayNetCore.Dto;
 using FisaPayNetCore.Model;
 using FisaPayNetCore.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -41,6 +42,23 @@ namespace FisaPayNetCore.Controllers
         }
 
         [Authorize]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetEmpleadobyId(int id)
+        {
+            try
+            {
+                //obtener empleado
+                var empleado = await _empleadoService.GetempleadobyId(id).ConfigureAwait(false);
+
+                return Ok(empleado);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { status = HttpStatusCode.BadRequest, message = ex.Message });
+            }
+        }
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Empleados empleadoDto)
         {
@@ -62,8 +80,8 @@ namespace FisaPayNetCore.Controllers
         }
 
         [Authorize]
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] Empleados empleadoDto, int id)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update([FromBody] EmpleadoDto empleadoDto, int id)
         {
             try
             {
@@ -73,7 +91,7 @@ namespace FisaPayNetCore.Controllers
                 return Ok(new
                 {
                     status = HttpStatusCode.Created,
-                    sms = "Empleado " + empleado.Nombres + " actualizado con exito"
+                    sms = "Empleado actualizado con exito"
                 });
             }
             catch (Exception ex)

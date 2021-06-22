@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System;
 using System.Globalization;
+using FisaPayNetCore.Dto;
 
 namespace FisaPayNetCore.Services
 {
@@ -14,8 +15,9 @@ namespace FisaPayNetCore.Services
     {
         Task<Empleados> CreateAsync(Empleados empleado);
         Task<bool> Delete(int id);
-        Task<Empleados> Update(Empleados empleado, int id);
+        Task<bool> Update(EmpleadoDto empleado, int id);
         Task<IEnumerable<Empleado>> GetEmpleadosAsync();
+        Task<Empleados> GetempleadobyId(int id);
     }
 
     public class EmpleadosService : IEmpleadosService
@@ -60,7 +62,7 @@ namespace FisaPayNetCore.Services
 
                 edadActual = edad + " años";
 
-                Empleado data = new Empleado(itemEmpleado.e.Id,itemEmpleado.e.Cedula, itemEmpleado.e.Nombres, itemEmpleado.e.Sexo, itemEmpleado.e.FechaNacimiento.ToString("yyyy-MM-dd"), edadActual, itemEmpleado.e.Salario.ToString("C", CultureInfo.CurrentCulture), itemEmpleado.e.VacunaCovid);
+                Empleado data = new Empleado(itemEmpleado.e.Id, itemEmpleado.e.Cedula, itemEmpleado.e.Nombres, itemEmpleado.e.Sexo, itemEmpleado.e.FechaNacimiento.ToString("yyyy-MM-dd"), edadActual, itemEmpleado.e.Salario.ToString("C", CultureInfo.CurrentCulture), itemEmpleado.e.VacunaCovid);
                 listEmpleado.Add(data);
             }
 
@@ -77,17 +79,24 @@ namespace FisaPayNetCore.Services
             return true;
         }
 
-        public async Task<Empleados> Update(Empleados empleado, int id)
+        public async Task<bool> Update(EmpleadoDto empleado, int id)
         {
             var currentEmpleado = await _context.Empleados.FirstOrDefaultAsync(x => x.Id == id).ConfigureAwait(false);
 
             currentEmpleado.Salario = empleado.Salario;
-            currentEmpleado.Nombres = empleado.Nombres;
+            currentEmpleado.Nombres = empleado.Nombre;
             currentEmpleado.Sexo = empleado.Sexo;
-            currentEmpleado.VacunaCovid = empleado.VacunaCovid;
+            currentEmpleado.VacunaCovid = empleado.Vacuna;
 
             _context.Empleados.Update(currentEmpleado);
             await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<Empleados> GetempleadobyId(int id)
+        {
+            var empleado = await _context.Empleados.FirstOrDefaultAsync(e => e.Id == id).ConfigureAwait(false);
 
             return empleado;
         }
