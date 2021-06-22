@@ -82,7 +82,7 @@ namespace FisaPayNetCore.Controllers
             }
         }
 
-        [Authorize]
+        /[Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

@@ -84,6 +84,7 @@ namespace FisaPayNetCore.Services
             currentEmpleado.Salario = empleado.Salario;
             currentEmpleado.Nombres = empleado.Nombres;
             currentEmpleado.Sexo = empleado.Sexo;
+            currentEmpleado.VacunaCovid = empleado.VacunaCovid;
 
             _context.Empleados.Update(currentEmpleado);
             await _context.SaveChangesAsync();
