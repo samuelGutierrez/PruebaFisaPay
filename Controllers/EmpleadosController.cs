@@ -80,13 +80,13 @@ namespace FisaPayNetCore.Controllers
         }
 
         [Authorize]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody] EmpleadoDto empleadoDto, int id)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] EmpleadoDto empleadoDto)
         {
             try
             {
                 // actualizar un empleado
-                var empleado = await _empleadoService.Update(empleadoDto, id).ConfigureAwait(false);
+                var empleado = await _empleadoService.Update(empleadoDto).ConfigureAwait(false);
 
                 return Ok(new
                 {

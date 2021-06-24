@@ -7,7 +7,8 @@ namespace FisaPayNetCore.Dto
 {
     public class EmpleadoDto
     {
-        public string Nombre { get; set; }
+        public int Id { get; set; }
+        public string Nombres { get; set; }
         public string Sexo { get; set; }
         public double Salario { get; set; }
         public bool Vacuna { get; set; }

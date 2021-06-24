@@ -15,7 +15,7 @@ namespace FisaPayNetCore.Services
     {
         Task<Empleados> CreateAsync(Empleados empleado);
         Task<bool> Delete(int id);
-        Task<bool> Update(EmpleadoDto empleado, int id);
+        Task<bool> Update(EmpleadoDto empleado);
         Task<IEnumerable<Empleado>> GetEmpleadosAsync();
         Task<Empleados> GetempleadobyId(int id);
     }
@@ -79,12 +79,12 @@ namespace FisaPayNetCore.Services
             return true;
         }
 
-        public async Task<bool> Update(EmpleadoDto empleado, int id)
+        public async Task<bool> Update(EmpleadoDto empleado)
         {
-            var currentEmpleado = await _context.Empleados.FirstOrDefaultAsync(x => x.Id == id).ConfigureAwait(false);
+            var currentEmpleado = await _context.Empleados.FirstOrDefaultAsync(x => x.Id == empleado.Id).ConfigureAwait(false);
 
             currentEmpleado.Salario = empleado.Salario;
-            currentEmpleado.Nombres = empleado.Nombre;
+            currentEmpleado.Nombres = empleado.Nombres;
             currentEmpleado.Sexo = empleado.Sexo;
             currentEmpleado.VacunaCovid = empleado.Vacuna;
 
